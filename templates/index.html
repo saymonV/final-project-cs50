@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Homepage
+{% endblock %}
+
+{% block main %}
+<div class="text-end nav__home">
+  <a class=" btn btn__homepage btn-primary" href="/login">Log in</a>
+  <a class=" btn btn__homepage btn-dark" href="/register">Register</a>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <h2>Something here</h2>
+      <h4>Photo of </h4>
+      <div class="fakeimg">Fake image</div>
+      <p>Some Text goes here</p>
+    </div>
+    <div class="col-sm-8">
+      <h2>Where did you go!</h2>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

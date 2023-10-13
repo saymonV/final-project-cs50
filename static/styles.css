@@ -1,0 +1,24 @@
+body {
+  background-color: #fff;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+  text-align: center;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.header__main {
+  background-color: aquamarine;
+  margin-bottom: 0.5rem;
+}
+.header__text {
+  color: blue;
+  font-size: 3rem;
+  font-weight: bolder;
+}
+
+.nav__home {
+  min-height: 100vp;
+  background-color: rgb(2, 114, 77);
+  margin-bottom: 1rem;
+}
