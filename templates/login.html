@@ -4,20 +4,76 @@ Log In
 {% endblock %}
 
 {% block main %}
-{% if error %}
-<p><strong>Error</strong>: {{ error }}</p>
+<nav class="navbar navbar-expand-md navbar-light nav__home">
+  <div class="container-fluid">
+    <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+      aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="navbar-nav me-auto mb-2 mb-md-0">
+        <li class="nav-item">
+          <a class="nav-link nav__text__left" href="/login_members">
+            <strong>Member Login</strong>
+          </a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item">
+          <a class="nav-link nav__text__right" href="/login"><strong>User Login</strong>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav__text__right" href="/register">
+            <strong>Register</strong>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for c, m in messages %}
+{% if c == "error__flash"%}
+<div class="alert alert-danger mb-0 text-center {{ c }}" role="alert">
+  {{ m }}
+</div>
+{% else %}
+<div class="alert alert-success mb-0 text-center {{ c }}" role="alert">
+  {{ m }}
+</div>
 {% endif %}
-
-<h4 class="my-field">Enter your username and password:</h4>
-<form action="/login" method="post">
-  <div class="mb-4">
-    <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username"
-      placeholder="Username(case sensitive)" type="text">
+{% endfor %}
+{% endif %}
+{% endwith %}
+<section class="vh-100 gradient">
+  <div class="container py-5 h-100">
+    <div class="row justify-content-center  h-100">
+      <div class="col-12 col-lg-9 col-xl-7">
+        <div class="card form__background border-0" style="border-radius: 16px;">
+          <div class="card-body p-4 p-md-5">
+            <h4 class="my-field my-3">Enter your information</h4>
+            <div class="">
+              <form action="/login" method="post">
+                <div class="mb-2 form-outline">
+                  <label class="mb-1" for="username">Username</label>
+                  <input autocomplete="off" autofocus class="form-control mx-auto" id="username" name="username"
+                    placeholder="John" type="text">
+                </div>
+                <div class="mb-2 form-outline">
+                  <label class="mb-1" for="password">Password</label>
+                  <input class="form-control mx-auto" id="password" name="password" placeholder="********"
+                    type="password">
+                </div>
+                <button class="btn btn-primary my__button" type="submit">Log In</button>
+                <p class="mt-5">Don't have an account? <a href="/register">Register here</a></p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="mb-4">
-    <input class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password" type="password">
-  </div>
-  <button class="btn btn-primary my-btn" type="submit"><u>L</u>og In</button>
-  <p>Don't have an account? <a href="/register">Register here</a></p>
-</form>
+</section>
 {% endblock %}

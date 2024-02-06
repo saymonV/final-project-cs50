@@ -5,23 +5,150 @@ Homepage
 {% endblock %}
 
 {% block main %}
-<div class="text-end nav__home">
-  <a class=" btn btn__homepage btn-primary" href="/login">Log in</a>
-  <a class=" btn btn__homepage btn-dark" href="/register">Register</a>
-</div>
 
-<div class="container">
-  <div class="row">
-    <div class="col-sm-4">
-      <h2>Something here</h2>
-      <h4>Photo of </h4>
-      <div class="fakeimg">Fake image</div>
-      <p>Some Text goes here</p>
-    </div>
-    <div class="col-sm-8">
-      <h2>Where did you go!</h2>
+<nav class="navbar navbar-expand-md navbar-light nav__home">
+  <div class="container-fluid">
+    <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+      aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse" id="navbar" style="">
+      <ul class="navbar-nav me-auto mb-2 mb-md-0 ">
+        {% if session["user_id"] %}
+        {% if group %}
+        <li class="nav-item">
+          <a class="nav-link nav__text__left" aria-current="page" href="/group_home"><strong>Group</strong></a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link nav__text__left" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft"
+            aria-controls="offcanvasLeft" href="#"><strong>Create Group</strong></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav__text__left" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+            aria-controls="offcanvasRight" href="#"><strong>Join Group</strong></a>
+        </li>
+        {% endif %}
+      </ul>
+      <ul class="nav navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link nav__text__right" href="/logout"><strong>Log Out</strong>
+          </a>
+        </li>
+        {% else %}
+        <li class="nav-item ">
+          <a class="nav-link nav__text__left" href="/login_members">
+            <strong>Member Login</strong>
+          </a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item">
+          <a class="nav-link nav__text__right" href="/login"><strong>User Login</strong>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav__text__right" href="/register">
+            <strong>Register</strong>
+          </a>
+        </li>
+      </ul>
+      {% endif %}
     </div>
   </div>
+</nav>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for c, m in messages %}
+{% if c == "error__flash"%}
+<div class="alert alert-danger mb-0 text-center {{ c }}" role="alert">
+  {{ m }}
 </div>
+{% else %}
+<div class="alert alert-success mb-0 text-center {{ c }}" role="alert">
+  {{ m }}
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endwith %}
+<section class="min-vh-100 gradient">
+  <div class="container">
+    <div class="row align-items-middle">
+      <div class="col-lg-6 my-5">
+        <h2 class="text__index">Chore chart</h2>
+        <div><img src="/static/cl3.jpg" class="img-fluid rounded-3"></div>
+      </div>
+      <div class="col-lg-6">
+        <h1 class="my-5 text__index">Easy way to organize familiy's or group's daily errands</h1>
+        <div class="my-5">
+          <img src="/static/tt3.jpg" class="img-fluid img__index">
+        </div>
+        <h1 class="my-5 text__index">Track school time tables for a group of kids at the time</h1>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Offcanvas left for create group -->
+
+<div class="offcanvas offcanvas-start header__main" tabindex="-1" id="offcanvasLeft"
+  aria-labelledby="offcanvasLeftLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasLeftleLabel">Create group</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <form class="gy-3" action="/create_group" method="POST">
+      <div class="mb-3">
+        <label for="name" class="form-label">Group name</label>
+        <div class="input-group has-validation">
+          <input autocomplete="off" autofocus type="text" class="form-control" id="name" name="group-name"
+            placeholder="Gallagher's" required>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input autocomplete="off" type="password" class="form-control" id="password" placeholder="Minimum 6 characters"
+          name="group-password" required>
+      </div>
+      <div class="mb-3">
+        <label for="check" class="form-label">Retype password</label>
+        <input autocomplete="off" type="password" class="form-control" id="check" placeholder="Minimum 6 characters"
+          name="group-password-check" required>
+      </div>
+      <button type="submit" class="btn" style="background-color:#f8b033">Create group</button>
+    </form>
+  </div>
+</div>
+</div>
+
+<!-- Offcanvas right for join group -->
+
+<div class="offcanvas offcanvas-end header__main" tabindex="-1" id="offcanvasRight"
+  aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasRightLabel">Join group</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <form action="/join_group" method="POST">
+      <div class="mb-3">
+        <label for="group-number" class="form-label">Group number</label>
+        <div class="input-group has-validation">
+          <input autocomplete="off" autofocus type="text" class="form-control" id="group-number"
+            name="join-group-number" placeholder="5 - digits" required maxlength="5">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Group password</label>
+        <input autocomplete="off" type="password" class="form-control" placeholder="********" name="join-group-password"
+          required>
+      </div>
+      <button type="submit" class="btn" style="background-color:#f8b033">Join Group</button>
+    </form>
+  </div>
+</div>
+
+
 
 {% endblock %}

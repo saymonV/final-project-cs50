@@ -1,24 +1,194 @@
 body {
-  background-color: #fff;
+  background-color: #ffffff;
   font-size: 1rem;
   line-height: 1.5;
   margin: 0;
   text-align: center;
-  font-family: Georgia, "Times New Roman", Times, serif;
+  font-family: Tekton pro;
+  height: 100%;
+  min-height: 100%;
 }
 
 .header__main {
-  background-color: aquamarine;
-  margin-bottom: 0.5rem;
+  background: rgb(40, 88, 247);
+  background: radial-gradient(
+    circle,
+    rgba(40, 88, 247, 1) 1%,
+    rgba(36, 184, 194, 1) 100%
+  );
 }
 .header__text {
-  color: blue;
-  font-size: 3rem;
+  color: #ffbe4f;
+  vertical-align: middle;
+  font-size: 4em;
   font-weight: bolder;
+  text-decoration: none;
+  text-align: center;
+}
+.header__text:hover {
+  color: rgb(36, 184, 194);
 }
 
 .nav__home {
-  min-height: 100vp;
-  background-color: rgb(2, 114, 77);
-  margin-bottom: 1rem;
+  background: rgb(255, 252, 116);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 252, 116, 1) 1%,
+    rgba(98, 195, 255, 1) 92%
+  );
+}
+
+.ttt {
+  border-color: rgb(61, 158, 255);
+}
+
+.icon__text {
+  margin-top: 0.5rem;
+  padding: auto;
+}
+.icon__color {
+  background: rgb(24, 70, 255);
+  background: radial-gradient(
+    circle,
+    rgba(24, 70, 255, 1) 59%,
+    rgba(61, 158, 255, 0.7917542016806722) 100%
+  );
+}
+
+.form_container {
+  margin: auto;
+  text-align: center;
+  padding: 3rem;
+}
+
+.img__background {
+  background-image: url("static/green-gradiant-bc.jpg");
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #cccccc;
+}
+.img__index {
+  border-radius: 50% 20% / 10% 40%;
+}
+.text__index {
+  color: #2784ff;
+  font-weight: 1000;
+  font-size: 3rem;
+}
+.text__chart {
+  color: #0e88f4;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: rgb(3, 20, 84);
+  font-weight: 800;
+  font-size: 2rem;
+}
+.border__form {
+  border-radius: 5px;
+  border: 5px solid #969696;
+}
+
+.menu__icon {
+  box-shadow: 0 10px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.banner {
+  background-color: rgb(187, 118, 0);
+  height: 35px;
+  max-height: 100px;
+}
+
+.gradient {
+  background: rgb(255, 214, 145);
+  background: linear-gradient(
+    319deg,
+    rgba(255, 214, 145, 1) 0%,
+    rgba(255, 195, 93, 1) 100%
+  );
+}
+
+.offcanvas__color {
+  background: rgb(255, 214, 145);
+  background: linear-gradient(
+    0deg,
+    rgba(255, 214, 145, 1) 0%,
+    rgba(255, 195, 93, 1) 72%
+  );
+}
+
+.table__background {
+  background: rgb(127, 188, 255);
+  background: linear-gradient(
+    0deg,
+    rgba(127, 188, 255, 0.8449754901960784) 0%,
+    rgba(247, 236, 150, 1) 100%
+  );
+}
+
+.form__background {
+  font-size: 1.25rem;
+  line-height: 3;
+  padding-left: 0.9em;
+  padding-right: 0.9em;
+  background: rgb(127, 188, 255);
+  background: linear-gradient(
+    0deg,
+    rgba(127, 188, 255, 0.8449754901960784) 0%,
+    rgba(247, 236, 150, 1) 100%
+  );
+}
+
+.chores__background {
+  font-size: 1.1rem;
+  min-height: 30rem;
+  line-height: 2;
+  background: rgb(127, 188, 255);
+  background: linear-gradient(
+    0deg,
+    rgba(127, 188, 255, 0.8449754901960784) 0%,
+    rgba(247, 236, 150, 1) 100%
+  );
+}
+
+.school__background {
+  font-size: 1.25rem;
+  min-height: 30rem;
+
+  background: rgb(127, 188, 255);
+  background: linear-gradient(
+    0deg,
+    rgba(127, 188, 255, 0.8449754901960784) 0%,
+    rgba(247, 236, 150, 1) 100%
+  );
+}
+
+tr:nth-child(even) {
+  background-color: rgba(40, 88, 247, 0.4);
+}
+
+.my__footer {
+  background: rgb(40, 88, 247);
+  background: radial-gradient(
+    circle,
+    rgba(40, 88, 247, 1) 1%,
+    rgba(36, 184, 194, 1) 100%
+  );
+}
+
+.nav__text__left {
+  color: rgb(4, 121, 194);
+  font-size: 1.3em;
+}
+.nav__text__left:hover {
+  color: rgb(254, 192, 85);
+}
+.nav__text__right {
+  color: rgb(254, 192, 85);
+  font-size: 1.3em;
+}
+
+.my__button {
+  text-align: center;
+  font-size: 1em;
 }
