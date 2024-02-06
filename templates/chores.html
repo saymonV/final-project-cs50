@@ -1,0 +1,149 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Chores
+{% endblock %}
+
+{% block main %}
+<nav class="navbar navbar-expand-md navbar-light nav__home">
+  <div class="container-fluid">
+    <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+      aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse" id="navbar" style="">
+      <ul class="navbar-nav me-auto mb-2 mb-md-0 ">
+      </ul>
+      <ul class="nav navbar-nav">
+        {% if id %}
+        <li class="nav-item ">
+          <a class="nav-link nav__text__right" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom"
+            aria-controls="offcanvasBottom" href=""><strong>Create chore</strong></a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link nav__text__right" href="/group_home"><strong>Group</strong>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for c, m in messages %}
+{% if c == "error__flash"%}
+<div class="alert alert-danger mb-0 text-center {{ c }}" role="alert">
+  {{ m }}
+</div>
+{% else %}
+<div class="alert alert-success mb-0 text-center {{ c }}" role="alert">
+  {{ m }}
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endwith %}
+<section class="min-vh-100 gradient">
+  <div class="container">
+    <div class="row  align-items-middle">
+      <div class="col-sm-10 mt-3">
+        <div
+          class="overflow-auto shadow-lg p-3 bg-body rounded  table-responsive overflow-auto chores__background  h-50">
+          <table class="table m-auto">
+            <thead>
+              <tr style="background-color:rgba(40, 88, 247, 0.9)">
+                <th class="text-start align-middle">Title</th>
+                <th class="text-start align-middle">Description</th>
+                <th class="text-center align-middle">Time posted</th>
+                <th class="text-center align-middle">Completed <br class="text-center">by</th>
+
+                <th class="text-center align-middle">Time <br> Completed</th>
+                <th class="text-end align-middle">Action</th>
+              </tr>
+            </thead>
+            <tbody class="border-0" colspan="8">
+              {% for row in chores %}
+              <tr>
+                <td class="text-start align-middle">{{ row.title }}</td>
+
+                <td class="text-start align-middle">{{row.description }}</td>
+                <td class="text-center align-middle">{{ row.time_posted }}</td>
+                <td class="text-center align-middle">{{ row.completed_by }}</td>
+                <td class="text-center align-middle">{{ row.time_completed }}</td>
+                {% if id %}
+                <td class="text-end align-middle">
+                  <button class="btn btn__del__chore" data-id="{{ row.id }}" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red"
+                      class="bi bi-patch-minus-fill" viewBox="0 0 16 16">
+                      <path
+                        d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zM6 7.5h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1 0-1" />
+                    </svg>
+                  </button>
+                </td>
+                {% else %}
+                <td class="text-end align-middle">
+                  <button type="button" class="btn btn__complete__chore" data-id="{{ row.id }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green"
+                      class="bi bi-patch-check-fill" viewBox="0 0 16 16">
+                      <path
+                        d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z" />
+                    </svg>
+                  </button>
+                </td>
+                {% endif %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-sm-2 mt-3">
+        <div class="shadow-lg p-3 bg-body rounded table-responsive overflow-auto h-50 chores__background">
+          <table class="table table-borderless table-hover">
+            <thead>
+              <tr>
+                <td class="table-info">Members</td>
+              </tr>
+            </thead>
+            {% for m in members %}
+            <tbody>
+              <tr>
+                <td class="table-warning">{{ m.name }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+</section>
+
+<!-- Offcanvas for creating a chore -->
+<div class="offcanvas offcanvas-bottom offcanvas__color" tabindex="-1" id="offcanvasBottom"
+  aria-labelledby="offcanvasBottomLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasBottomLabel" style="color:#ffc35d">Create a new chore</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <form class="row gy-5 gx-5  align-items-center mx-auto" method="POST" name="create_chore">
+      <div class="col-auto">
+        <label for="title" style="font-size:1.6em">Chore title</label>
+        <input autofocus type="text" class="form-control" id="title" placeholder="Title" name="title" maxlength="16">
+      </div>
+      <div class="col-sm-6">
+        <label class="" for="chore" style="font-size:1.6em">Description</label>
+        <div class="input-group">
+          <textarea class="form-control" id="chore" rows="2" name="chore_desc" placeholder="Maximum 100 characters"
+            maxlength="100"></textarea>
+        </div>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary my__button">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

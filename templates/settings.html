@@ -1,0 +1,172 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Settings
+{% endblock %}
+
+{% block main %}
+<nav class="navbar navbar-expand-md navbar-light nav__home">
+  <div class="container-fluid">
+    <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+      aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="navbar-nav me-auto mb-2 mb-md-0 ">
+        <li class="nav-item">
+          <p class="text-align my-1 nav__text__left"><strong>Hello, {{ name }}</strong></p>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link nav__text__right" href="/group_panel"><strong>Group Panel</strong>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for c, m in messages %}
+{% if c == "error__flash"%}
+<div class="alert alert-danger mb-0 text-center {{ c }}" role="alert">
+  {{ m }}
+</div>
+{% else %}
+<div class="alert alert-success mb-0 text-center {{ c }}" role="alert">
+  {{ m }}
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endwith %}
+<section class="min-vh-100 gradient">
+  <div class="container">
+    <div class="row align-items-top">
+      <div class="col-md-9 my-3">
+        <div class="shadow-lg p-4 mb-3 bg-body rounded form__background">
+          <h3>Admin panel</h3>
+          <form action="/reset_user_password" method="post">
+            <span>Reset Your
+              password</span>
+            <div class="input-group input-group-md my-3" id="reset-password">
+              <span class="input-group-text">Old Password</span>
+              <input type="password" aria-label="Old Password" class="form-control" placeholder="********"
+                name="old-password-reset">
+              <span class="input-group-text">Repeat new password</span>
+              <input type="password" aria-label="New Password" class="form-control" name="new-password-reset"
+                placeholder="6-8 characters">
+              <input type="password" aria-label="Password Check" class="form-control" aria-describedby="button-addon1"
+                name="check-reset" placeholder="********">
+              <button class="btn btn-outline-primary" type="submit" id="button-addon1">Reset</button>
+            </div>
+          </form>
+          <form action="/delete_account" method="post">
+            <span>Delete account</span>
+            <div class="input-group input-group-md my-3 w-50 mx-auto" id="delete-account">
+              <span class="input-group-text">Your Password</span>
+              <input type="password" aria-label="Old Password" class="form-control" placeholder="Password"
+                aria-describedby="button-addon2" name="delete-account-password">
+              <input type="password" aria-label="Old Password" class="form-control" placeholder="********"
+                aria-describedby="button-addon3" name="delete-account-check">
+              <button class="btn btn-outline-danger" type="submit" id="button-addon3">Delete</button>
+            </div>
+          </form>
+          {% if creator %}
+          <!-- Making it none visible if creator is logged in -->
+          {% else %}
+          <form action="/leave_group" method="post">
+            <span>Leave Group</span>
+            <div class="input-group input-group-md my-3 w-50 mx-auto" id="leave-group-section">
+              <span class="input-group-text">Your Password</span>
+              <input type="password" aria-label="Old Password" class="form-control" placeholder="********"
+                aria-describedby="button-addon4" name="leave-group-password">
+              <button class="btn btn-outline-danger" type="submit" id="button-addon4">Leave</button>
+            </div>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-md-3 mt-3">
+        <div class="shadow-lg p-4 mb-3 bg-body rounded form__background">
+          <label class="mb-1" for="read-group-number">Group Number</label>
+          <input class="form-control" type="password" value="{{ gn }}" aria-label="readonly input"
+            id="read-group-number" aria-describedby="button-addon5" readonly>
+          <button class="btn btn-primary mt-5 my__button" id="btn-show-number">Show</button>
+        </div>
+      </div>
+    </div>
+    {% if creator %}
+    <div class="row align-items-top">
+      <div class="col-md-9 my-3">
+        <div class="shadow-lg p-4 bg-body rounded form__background">
+          <h3>Creator's panel</h3>
+          <form action="/reset_group_password" method="post">
+            <span>Reset Group password</span>
+            <div class="input-group input-group-sm my-3" id="reset-grouppassword">
+              <span class="input-group-text">Old Password</span>
+              <input type="password" aria-label="Old Password" class="form-control" placeholder="********"
+                name="group-password-old">
+              <span class="input-group-text">Repeat new password</span>
+              <input type="password" aria-label="New Password" class="form-control" placeholder="Min. 8 characters"
+                name="group-password-new">
+              <input type="password" aria-label="Password Check" class="form-control" aria-describedby="button-addon2"
+                name="reset-group-password-check" placeholder="********">
+              <button class="btn btn-outline-primary" type="submit" id="button-addon2">Reset Group Password</button>
+            </div>
+          </form>
+          <form action="/delete_group" method="post">
+            <span>Delete Group</span>
+            <div class="input-group input-group-sm my-3" id="reset-password-form">
+              <span class="input-group-text">Group Number</span>
+              <input type="text" aria-label="Group Number" class="form-control" placeholder="5-digits"
+                name="delete-group-number">
+              <span class="input-group-text">Creator's password</span>
+              <input type="password" aria-describedby="button-addon3" class="form-control" name="delete-group-password"
+                placeholder="Your password">
+              <button class="btn btn-outline-danger" type="submit" id="button-addon3">Delete Group</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-md-3 my-3">
+        <div class="shadow-md p-3 bg-body rounded table__background">
+          <table class=" table table-borderless table-hover">
+            <thead>
+              <tr class="table-warning">
+                <td>Admins</td>
+                <td>Remove</td>
+              </tr>
+            </thead>
+            {% for a in admins %}
+            <tbody>
+              <tr>
+                <td class="align-middle text-center">{{ a.name }}</td>
+                <td class="align-middle text-center"><button class="btn btn__remove__admin" data-name="{{ a.name }}"
+                    type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red" class="bi bi-x-octagon"
+                      viewBox="0 0 16 16">
+                      <path
+                        d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1z" />
+                      <path
+                        d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  </div>
+  </div>
+</section>
+{% endblock %}

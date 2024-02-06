@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Group Homepage
+{% endblock %}
+
+{% block main %}
+<nav class="navbar navbar-expand-md navbar-light nav__home">
+  <div class="container-fluid">
+    <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+      aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="navbar-collapse collapse" id="navbar" style="">
+      <ul class="navbar-nav me-auto mb-2 mb-md-0 ">
+        <li class="nav-item">
+          <p class="text-align my-1 nav__text__left"><strong>Welcome to your group, {{ name }}.</strong></p>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link nav__text__right" href="/logout"><strong>Log Out</strong>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<section class="min-vh-100 gradient">
+  {% if user %}
+  <div class="container my-5">
+    <div class="row g-5 row-cols-lg-3">
+      <div class="feature col">
+        <a href="/chores">
+          <button type="button" class="btn shadow p-3 icon__color">
+            <svg xmlns="http://www.w3.org/2000/svg" width="66" height="66" fill="white" class="bi bi-house-heart-fill"
+              viewBox="0 0 16 17">
+              <path
+                d="M7.293 1.5a1 1 0 0 1 1.414 0L11 3.793V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3.293l2.354 2.353a.5.5 0 0 1-.708.707L8 2.207 1.354 8.853a.5.5 0 1 1-.708-.707L7.293 1.5Z" />
+              <path
+                d="m14 9.293-6-6-6 6V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9.293Zm-6-.811c1.664-1.673 5.825 1.254 0 5.018-5.825-3.764-1.664-6.691 0-5.018Z" />
+            </svg>
+          </button>
+        </a>
+        <h3 class="icon__text">Chores</h3>
+      </div>
+      <div class="feature col">
+        <a href="/school">
+          <button type="button" class="btn shadow p-3 icon__color">
+            <svg xmlns="http://www.w3.org/2000/svg" width="66" height="66" fill="white" class="bi bi-backpack-fill"
+              viewBox="0 0 16 17">
+              <path d="M5 13v-3h4v.5a.5.5 0 0 0 1 0V10h1v3H5Z" />
+              <path
+                d="M6 2v.341C3.67 3.165 2 5.388 2 8v5.5A2.5 2.5 0 0 0 4.5 16h7a2.5 2.5 0 0 0 2.5-2.5V8a6.002 6.002 0 0 0-4-5.659V2a2 2 0 1 0-4 0Zm2-1a1 1 0 0 1 1 1v.083a6.04 6.04 0 0 0-2 0V2a1 1 0 0 1 1-1Zm0 3a4 4 0 0 1 3.96 3.43.5.5 0 1 1-.99.14 3 3 0 0 0-5.94 0 .5.5 0 1 1-.99-.14A4 4 0 0 1 8 4ZM4.5 9h7a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Z" />
+            </svg>
+          </button>
+        </a>
+        <h3 class="icon__text">School</h3>
+      </div>
+      <div class="feature col">
+        <a href="/group_panel">
+          <button class="btn shadow p-3 icon__color">
+            <svg xmlns="http://www.w3.org/2000/svg" width="66" height="66" fill="white" class="bi bi-sliders"
+              viewBox="0 0 16 17">
+              <path fill-rule="evenodd"
+                d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z" />
+            </svg>
+          </button>
+        </a>
+        <h3 class="icon__text">Group <br /> Panel</h3>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="container px-4 py-5">
+    <div class="row g-5 py-5 row-cols-lg-2">
+      <div class="feature col">
+        <a href="/chores">
+          <button type="button" class="btn shadow p-3 icon__color">
+            <svg xmlns="http://www.w3.org/2000/svg" width="66" height="66" fill="white" class="bi bi-house-heart-fill"
+              viewBox="0 0 16 17">
+              <path
+                d="M7.293 1.5a1 1 0 0 1 1.414 0L11 3.793V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3.293l2.354 2.353a.5.5 0 0 1-.708.707L8 2.207 1.354 8.853a.5.5 0 1 1-.708-.707L7.293 1.5Z" />
+              <path
+                d="m14 9.293-6-6-6 6V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9.293Zm-6-.811c1.664-1.673 5.825 1.254 0 5.018-5.825-3.764-1.664-6.691 0-5.018Z" />
+            </svg>
+          </button>
+        </a>
+        <h3 class="icon__text">Chores</h3>
+      </div>
+      <div class="feature col">
+        <a href="/school">
+          <button type="button" class="btn shadow p-3 icon__color">
+            <svg xmlns="http://www.w3.org/2000/svg" width="66" height="66" fill="white" class="bi bi-backpack-fill"
+              viewBox="0 0 16 17">
+              <path d="M5 13v-3h4v.5a.5.5 0 0 0 1 0V10h1v3H5Z" />
+              <path
+                d="M6 2v.341C3.67 3.165 2 5.388 2 8v5.5A2.5 2.5 0 0 0 4.5 16h7a2.5 2.5 0 0 0 2.5-2.5V8a6.002 6.002 0 0 0-4-5.659V2a2 2 0 1 0-4 0Zm2-1a1 1 0 0 1 1 1v.083a6.04 6.04 0 0 0-2 0V2a1 1 0 0 1 1-1Zm0 3a4 4 0 0 1 3.96 3.43.5.5 0 1 1-.99.14 3 3 0 0 0-5.94 0 .5.5 0 1 1-.99-.14A4 4 0 0 1 8 4ZM4.5 9h7a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Z" />
+            </svg>
+          </button>
+        </a>
+        <h3 class="icon__text">School</h3>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</section>
+
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block title %}
+Log In Members
+{% endblock %}
+
+{% block main %}
+<nav class="navbar navbar-expand-md navbar-light nav__home">
+  <div class="container-fluid">
+    <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+      aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="navbar-nav me-auto mb-2 mb-md-0">
+        <li class="nav-item">
+          <a class="nav-link nav__text__left" href="/login_members">
+            <strong>Member Login</strong>
+          </a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item">
+          <a class="nav-link nav__text__right" href="/login"><strong>User Login</strong>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav__text__right" href="/register">
+            <strong>Register</strong>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for c, m in messages %}
+<div class="alert alert-danger mb-0 text-center {{ c }}" role="alert">
+  {{ m }}
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<section class="vh-100 gradient">
+  <div class="container py-5 h-100">
+    <div class="row justify-content-center h-100">
+      <div class="col-12 col-lg-9 col-xl-7">
+        <div class="card shadow-strong form__background" style="border-radius: 16px;">
+          <div class="card-body p-4 p-md-5">
+            <h4 class="my-field my-3">Members login:</h4>
+            <form action="/login_members" method="post">
+              <div class="mb-2">
+                <label class="mb-1" for="group-id">Group ID</label>
+                <input autocomplete="on" autofocus class="form-control mx-auto" id="group-id" name="group-number"
+                  placeholder="5 - digits" type="text">
+              </div>
+
+              <div class="mb-2">
+                <label class="mb-1" for="name">Your name</label>
+                <input autocomplete="off" class="form-control mx-auto" id="name" name="member-name" placeholder="Frank"
+                  type="text">
+              </div>
+
+              <div class="mb-4">
+                <label class="mb-1" for="password">Password</label>
+                <input class="form-control mx-auto" id="password" name="password-member"
+                  placeholder="6 to 12 characters" type="password">
+              </div>
+
+              <button class="btn btn-primary my__button my-4" type="submit"><u>L</u>og In</button>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
