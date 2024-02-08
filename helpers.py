@@ -1,14 +1,8 @@
-import csv
 import datetime
-import subprocess
-import urllib
-import uuid
 import random
 import re
 import json
 import sqlite3
-import itertools
-import asyncio
 
 from flask import redirect, render_template, session
 from functools import wraps
@@ -217,7 +211,6 @@ def save_group(group):
             ]
         )
         db_connect.commit()
-        print("Group Saved")
     except sqlite3.Error as e:
         print("Error in save_group", e)
 
@@ -235,7 +228,6 @@ def save_member(profile):
             ]
         )
         db_connect.commit()
-        print("Member Saved")
     except sqlite3.Error as e:
         print("Error in save_member", e)
 
@@ -250,7 +242,6 @@ def delete_member(profile):
             ]
         )
         db_connect.commit()
-        print("Member deleted")
     except sqlite3.Error as e:
         print("Error in delete_member", e)
 
@@ -265,7 +256,6 @@ def save_chore(chore):
             ]
         )
         db_connect.commit()
-        print("Chore Saved")
     except sqlite3.Error as e:
         print("Error in save_chore", e)
 
@@ -323,7 +313,6 @@ def delete_group_database(grp_number, id, admins):
         db_connect.commit()
     except sqlite3.Error as e:
         print("SQL error deleting from user")
-    print(admins)
     # Update admins group ID 
     for a in admins:
         try:

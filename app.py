@@ -1,10 +1,9 @@
-import datetime
 import json
 import sqlite3
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
-from operator import itemgetter, attrgetter
+
 from helpers import login_required, email_check, Group, random_group_number, generate_chore, load_group, generate_member_profile, user_check, save_group, delete_group_database
 
 # Aplication configuration
@@ -52,7 +51,6 @@ def index():
     except KeyError as k:   
         return render_template("index.html")
     except TypeError as t:
-        
         return render_template("index.html")
             
     
@@ -99,7 +97,6 @@ def login():
 # Log in page for Members
 @app.route("/login_members", methods=["GET", "POST"])
 def members_login():
-    
     if request.method == "GET":
         return render_template("login_members.html")
     else:
@@ -150,8 +147,7 @@ def register():
     else:
         username = request.form.get("username")
         email = request.form.get("email").lower()
-        password = request.form.get("user-password")
-        
+        password = request.form.get("user-password")  
         # Ensures data input from user is valid
         if not username or not username.isalpha() or any(char.isspace() for char in username):
             flash("Invalid username", "error__flash")
@@ -160,22 +156,22 @@ def register():
         else:
             # Conver username to a valid format
             formated_username = f"{username[0].upper()}{username[1:].lower()}"                 
-            # Spaces are not allowed in username
+            # Check if username is already in database
             if db_connect.execute("SELECT * FROM users WHERE username=?;",
                 [
                     formated_username
                 ]).fetchone():
-                flash("Username taken")
-
+                flash("Username taken", "error__flash")
+            # Email must be in correct format
             elif not email or not email_check(email):
                 flash("Invalid e-mail adress", "error__flash")
-
+            # Check if email is already in database
             elif db_connect.execute("SELECT email FROM users WHERE email=?;",
                                     [
                                        email 
                                     ]).fetchone():
                 flash("Email already taken", "error__flash")
-
+            # Password check
             elif not password or len(password) < 8:
                 flash("Invalid password - Must be at least 8 characters", "error__flash")
 
@@ -187,7 +183,7 @@ def register():
                         "SELECT * FROM users WHERE username=?;", 
                         [formated_username]
                         ).fetchone()
-
+                # Check if usarname is already in database
                 if user:
                     flash("Username taken", "error__flash")
 
@@ -209,25 +205,22 @@ def register():
 
                 flash("You successfuly created a new account.", "success__flash")
                 return redirect("/login")
-        print("It works")
         return redirect("/register")
 
-# Creates a group
+# Creates a new group
 @app.route("/create_group", methods=["POST"])
 @login_required
 def create_group():
-    # Storing user input -- grp short for group
+    # Storing user input in to a variable -- grp short for group
     grp_name = request.form.get("group-name")
     grp_password = request.form.get("group-password")
     # Ensuring input is valid
     if not grp_name or len(grp_name) < 3 or len(grp_name) > 16:
-       flash("Enter a group name 3 to 16 characters long", "error__flash")
-        
+       flash("Enter a group name 3 to 16 characters long", "error__flash") 
     elif not grp_password or len(grp_password) < 6 or len(grp_password) > 16:
         flash("Invalid password", "error__flash")
     elif request.form.get("group-password-check") != grp_password:
         flash("Passwords do not match!", "error__flash")
-        
     else:
         # Generates unique group number
         grp_number = random_group_number()
@@ -257,26 +250,27 @@ def create_group():
         # Format Group in to JSON 
         json_grp = json.dumps(group.__dict__)
         
-        # Save it in database
-        group_id = db_connect.execute(
-            "INSERT INTO groups (grp_number, grp_class, creator_id)"
-            "VALUES (?, ?, ?)"
-            "RETURNING id;",
-                   [
-                    grp_number, 
-                    json_grp,
-                    user[0]
-                   ]).fetchone()[0]
-        db_connect.commit()
-        # Updates user with group ID
-        db_connect.execute(
-            "UPDATE users SET grp_id=? WHERE id=?;",
-            [group_id, session["user_id"]]
-            )
-        db_connect.commit()
-        return redirect("/group_home")
-    
-    # Render error message
+        # Save group in database and returning uniqe ID
+        try:
+            group_id = db_connect.execute(
+                "INSERT INTO groups (grp_number, grp_class, creator_id)"
+                "VALUES (?, ?, ?)"
+                "RETURNING id;",
+                       [
+                        grp_number, 
+                        json_grp,
+                        user[0]
+                       ]).fetchone()[0]
+            db_connect.commit()
+            # Updates user with group ID
+            db_connect.execute(
+                "UPDATE users SET grp_id=? WHERE id=?;",
+                [group_id, session["user_id"]]
+                )
+            db_connect.commit()
+            return redirect("/group_home")
+        except sqlite3.Error as e:
+            flash("Something went wrong", "error__flash")
     return redirect ("/")
 
 # Join a group as users
@@ -317,11 +311,8 @@ def join_group():
 
                 # If updated call another function 
                 return join_group_save()
-        
             except sqlite3.Error as e:
-                print("Error updating user", e)
-
-        
+                print("Error updating user", e) 
     return redirect("/")
 
 # Updates group admin list
@@ -342,11 +333,12 @@ def join_group_save():
     return redirect("/")
 
 
-
+# Group home page
 @app.route("/group_home", methods=["GET", "POST"])
 @login_required
 def group_home():
     if request.method == "GET":
+        # Checking if it's a User or Member
         if user_check(session["user_id"]):
             name = db_connect.execute(
                     "SELECT username FROM users WHERE id=?;",
@@ -388,6 +380,7 @@ def chores():
 
         if not title  or not desc:
             flash("All fields are requierd", "error__flash")
+        # Chore limit per group
         elif len(group.chores) >= 50:
             flash("Maximum number of chorse per group has been reached", "error__flash") 
         else:
@@ -426,6 +419,7 @@ def chores():
 def group_panel():
     if request.method == "GET":
         group = load_group()
+        # Display current user name and members list
         name = db_connect.execute(
                     "SELECT username FROM users WHERE id=?;",
                     [
@@ -470,37 +464,38 @@ def add_member():
                     salt_length=12
                     )
             profile = generate_member_profile(formated_name, request.form.get("password"), group.number)
-            
-            db_connect.execute(
-                "INSERT INTO members (name, hash, grp_number, profile)"
-                "VALUES (?, ?, ?, ?);",
-                [
-                    formated_name,
-                    hash,
-                    group.number,
-                    json.dumps(profile)  
-                ]
-            )
-            db_connect.commit()    
-            group.add_member(profile)
-            flash("Successfully added a new member", "flash))success")
+            try:
+                db_connect.execute(
+                    "INSERT INTO members (name, hash, grp_number, profile)"
+                    "VALUES (?, ?, ?, ?);",
+                    [
+                        formated_name,
+                        hash,
+                        group.number,
+                        json.dumps(profile)  
+                    ]
+                )
+                db_connect.commit()    
+                group.add_member(profile)
+                flash("Successfully added a new member", "success__flash")
+            except sqlite3.Error as e:
+                flash("Something went wrong", "error__flash")     
     return redirect ("/group_panel")
             
 
 # School page 
-@app.route("/school", methods=["GET", "POST"])
+@app.route("/school", methods=["GET"])
 @login_required
 def school():
-    if request.method == "GET":
-        group = load_group()
-        if not group.members:
-            return render_template("school.html") 
-            
-        return render_template("school.html", members=group.members)
+    group = load_group()
+    # Check if group has members
+    if not group.members:
+        return render_template("school.html")  
+    return render_template("school.html", members=group.members)
 
         
     
-# 
+# Update school page
 @app.route("/update_school", methods=["GET", "POST"])
 @login_required
 def update_school():
@@ -540,14 +535,13 @@ def update_school():
                 for i in range(7):      
                     subject = request.form.get(f"input-{k[0]}-{i + 1}") 
                     subjects.append(subject)
-        
                 table.append(subjects)
         # Update members table 
         group.add_school(member, table)
         flash("Successfully updated", "success__flash")
         return redirect ("/update_school")
 
-# Sends group members to Java Script
+# Sends group members to JavaScript
 @app.route("/request_members", methods=["POST"])
 @login_required
 def send_members():
@@ -660,7 +654,7 @@ def reset_user_password():
                 session["user_id"]
             ]
             ).fetchone()
-
+    # Check user input
     if not check_password_hash(user[2], password):
         flash("Invalid password", "error__flash")
     elif len(new_password) < 8:
@@ -668,7 +662,7 @@ def reset_user_password():
     elif new_password != check:
         flash("Password doesn't match", "error__flash")
     else:
-        
+        # Update database
         db_connect.execute(
             "UPDATE users SET hash=?"
             "WHERE id=?;",
@@ -697,12 +691,13 @@ def leave_group():
             session["user_id"]
         ]
     ).fetchone()
-
+    # Check password
     if not check_password_hash(user[2], request.form.get("leave-group-password")):
         flash("Invalid password", "error__flash")
         
     else:      
         try:
+            # Update database
             db_connect.execute(
                 "UPDATE users SET grp_id=? WHERE id=?;",
                 [
@@ -712,12 +707,10 @@ def leave_group():
             )
             db_connect.commit()
 
-            group.remove_admin(session["user_id"])
-            
+            group.remove_admin(session["user_id"])  
             return redirect("/")
         except sqlite3.Error as e:
             print("Error updating user in Delete", e)
-  
     return redirect("/settings")
 
 # Reset group password by group creator
@@ -726,6 +719,7 @@ def leave_group():
 def reset_group_password():
     group = load_group()
     password = request.form.get("group-password-new")
+    # Check user input
     if not check_password_hash(group.hash, request.form.get("group-password-old")):
         flash("Invalid group password", "error__flash")
     elif not password or len(password) < 8:
@@ -759,6 +753,7 @@ def delete_group():
     elif not password or not check_password_hash(user[2], password):
         flash("Invalid creator's password", "error__flash")
     else:
+        # If all input checks out deletes group data, chores and members.
         delete_group_database(group.number, session["user_id"], group.admins)
         return redirect("/")
     
@@ -785,6 +780,7 @@ def delete_account():
         flash("Delete account: Invalid password", "error__flash")
     
     else:
+        # If user is not creator deletes account
         if not group.is_creator(session["user_id"]):
             try:
                 db_connect.execute(
@@ -794,15 +790,15 @@ def delete_account():
                     ]
                 )        
                 db_connect.commit()
+                group.remove_admin(session["user_id"])
             except sqlite3.Error as e:
                 flash("Something went wrong", "error__flash")
                 return redirect("/settings")
-            
-            group.remove_admin(session["user_id"])
             session.clear()
             flash("Successfully deleted your account", "success__flash")
             return redirect("/")
         else:
+            # If user is creator of group deletes a group as well
             try:
                 db_connect.execute(
                     "DELETE FROM users WHERE id=?;",
@@ -819,5 +815,4 @@ def delete_account():
             flash("Successfully deleted your account", "success__flash")
             return redirect("/")
     
-
     return redirect("/settings")
